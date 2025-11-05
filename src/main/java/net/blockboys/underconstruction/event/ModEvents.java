@@ -22,8 +22,12 @@ public class ModEvents {
         if (event.getType() == VillagerProfession.FARMER) {
             Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
 
-            // testing trades, it works!
-            // TODO find how to make trade guaranteed rather based off rng
+            // clear every trade level from villager
+            // guarantees our custom trade!
+            for (int level = 1; level <= 5; level++) {
+                trades.get(level).clear();
+            }
+
             trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 2),
                     new ItemStack(Items.CARROT, 10),
