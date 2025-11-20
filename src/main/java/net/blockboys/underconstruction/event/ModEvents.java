@@ -24,7 +24,8 @@ public class ModEvents {
 
             // clear every trade level from villager
             // guarantees our custom trade!
-            for (int level = 1; level <= 5; level++) {
+            int firstLevel = 1, lastLevel = 5;
+            for (int level = firstLevel; level <= lastLevel; level++) {
                 trades.get(level).clear();
             }
 
@@ -42,5 +43,4 @@ public class ModEvents {
 
         }
     }
-
 }
