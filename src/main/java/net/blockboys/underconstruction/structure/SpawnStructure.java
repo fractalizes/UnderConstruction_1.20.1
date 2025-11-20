@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -19,21 +20,34 @@ public class SpawnStructure {
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
         ServerLevel level = event.getServer().overworld(); // Overworld only
-        BlockPos spawn = level.getSharedSpawnPos();        // World spawn
+        BlockPos spawn = level.getSharedSpawnPos();        // World spawn X/Z
+
+        // Get surface height at spawn X/Z
+        int surfaceY = level.getHeight(
+                Heightmap.Types.WORLD_SURFACE,
+                spawn.getX(),
+                spawn.getZ()
+        );
+
+        // Position to place the structure
+        BlockPos groundPos = new BlockPos(
+                spawn.getX(),
+                surfaceY,
+                spawn.getZ()
+        );
 
         StructureTemplateManager manager = level.getStructureManager();
-        ResourceLocation id = new ResourceLocation("under_construction:ruins");
+        ResourceLocation id = new ResourceLocation("under_construction", "ruins");
         StructureTemplate template = manager.getOrCreate(id);
 
         if (template != null) {
             StructurePlaceSettings settings = new StructurePlaceSettings();
-            template.placeInWorld(level, spawn, spawn, settings, level.random, 2);
+            template.placeInWorld(level, groundPos, groundPos, settings, level.random, 2);
 
-            // spawn villager near structure
-            // TODO find way to spawn villager INSIDE structure and store inside location
-            BlockPos location = level.getSharedSpawnPos();
+            // Spawn a villager on top of the structure
+            BlockPos villagerPos = groundPos.above(); // 1 block above ground
             Villager villager = new Villager(EntityType.VILLAGER, level);
-            villager.setPosRaw(location.getX(), location.getY(), location.getZ());
+            villager.setPosRaw(villagerPos.getX(), villagerPos.getY(), villagerPos.getZ());
             level.addFreshEntity(villager);
         }
     }
