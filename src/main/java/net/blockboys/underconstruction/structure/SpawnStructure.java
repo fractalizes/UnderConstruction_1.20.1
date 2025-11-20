@@ -4,6 +4,8 @@ import net.blockboys.underconstruction.UnderConstruction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -26,6 +28,13 @@ public class SpawnStructure {
         if (template != null) {
             StructurePlaceSettings settings = new StructurePlaceSettings();
             template.placeInWorld(level, spawn, spawn, settings, level.random, 2);
+
+            // spawn villager near structure
+            // TODO find way to spawn villager INSIDE structure and store inside location
+            BlockPos location = level.getSharedSpawnPos();
+            Villager villager = new Villager(EntityType.VILLAGER, level);
+            villager.setPosRaw(location.getX(), location.getY(), location.getZ());
+            level.addFreshEntity(villager);
         }
     }
 }
