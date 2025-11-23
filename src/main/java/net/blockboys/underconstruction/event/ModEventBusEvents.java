@@ -39,13 +39,13 @@ public class ModEventBusEvents {
                             // update chest container items
                             if (chestItem.getCount() >= upgradeNumbers.get(i)) {
                                 newCount = chestItem.getCount() - upgradeNumbers.get(i);
-                                StructureClass.setNumbersList(i, newCount);
-                                chestItem.setCount(0);
+                                StructureClass.setNumbersList(i, 0);
+                                chestItem.setCount(newCount);
                                 continue;
                             }
                             newCount = upgradeNumbers.get(i) - chestItem.getCount();
-                            StructureClass.setNumbersList(i, 0);
-                            chestItem.setCount(newCount);
+                            StructureClass.setNumbersList(i, newCount);
+                            chestItem.setCount(0);
                         }
                     }
                 }
