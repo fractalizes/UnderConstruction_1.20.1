@@ -25,43 +25,54 @@ public class SpawnStructure {
     // TODO find way to do world generation event instead of server starting event
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
-        ServerLevel level = event.getServer().overworld(); // Overworld only
-        BlockPos spawn = level.getSharedSpawnPos();        // World spawn X/Z
 
-        // Get surface height at spawn X/Z
-        int surfaceY = level.getHeight(
-                Heightmap.Types.WORLD_SURFACE,
-                spawn.getX(),
-                spawn.getZ()
-        );
+        // only generate when first creating world
+        if (StructureClass.isGenerated()) {
 
-        // Position to place the structure
-        BlockPos groundPos = new BlockPos(
-                spawn.getX(),
-                surfaceY - 1,
-                spawn.getZ()
-        );
+            ServerLevel level = event.getServer().overworld(); // Overworld only
+            BlockPos spawn = level.getSharedSpawnPos();        // World spawn X/Z
 
-        // lower y level if starting position has any of these blocks
-        Block[] blocks = new Block[]{
-                Blocks.SNOW, Blocks.GRASS, Blocks.SUNFLOWER
-        };
-        if (Arrays.asList(blocks).contains(level.getBlockState(groundPos).getBlock())) {
-            groundPos.atY(groundPos.getY() - 1);
+            // Get surface height at spawn X/Z
+            int surfaceY = level.getHeight(
+                    Heightmap.Types.WORLD_SURFACE,
+                    spawn.getX(),
+                    spawn.getZ()
+            );
+
+            // Position to place the structure
+            BlockPos groundPos = new BlockPos(
+                    spawn.getX(),
+                    surfaceY - 1,
+                    spawn.getZ()
+            );
+
+            System.out.println(spawn.getX() + " " + spawn.getY() + " " + spawn.getZ() + " ");
+
+            // lower y level if starting position has any of these blocks
+            Block[] blocks = new Block[]{
+                    Blocks.SNOW, Blocks.GRASS, Blocks.SUNFLOWER
+            };
+            if (Arrays.asList(blocks).contains(level.getBlockState(groundPos).getBlock())) {
+                groundPos.atY(groundPos.getY() - 1);
+            }
+
+            StructureTemplateManager manager = level.getStructureManager();
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath("under_construction", "ruins");
+            StructureTemplate template = manager.getOrCreate(id);
+
+            // generate structure and villager
+            StructurePlaceSettings settings = new StructurePlaceSettings();
+            template.placeInWorld(level, groundPos, groundPos, settings, level.random, 2);
+
+            BlockPos villagerPos = groundPos.above(); // 1 block above ground
+            Villager villager = new Villager(EntityType.VILLAGER, level);
+            villager.setPosRaw(villagerPos.getX(), villagerPos.getY(), villagerPos.getZ());
+            level.addFreshEntity(villager);
+
+            // create class to store data across files
+            StructureClass.constructor(level, groundPos, villager);
+            StructureClass.setGenerated();
         }
-
-        StructureTemplateManager manager = level.getStructureManager();
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath("under_construction", "ruins");
-        StructureTemplate template = manager.getOrCreate(id);
-
-        // generate structure and villager
-        StructurePlaceSettings settings = new StructurePlaceSettings();
-        template.placeInWorld(level, groundPos, groundPos, settings, level.random, 2);
-
-        BlockPos villagerPos = groundPos.above(); // 1 block above ground
-        Villager villager = new Villager(EntityType.VILLAGER, level);
-        villager.setPosRaw(villagerPos.getX(), villagerPos.getY(), villagerPos.getZ());
-        level.addFreshEntity(villager);
 
         // TODO maybe instead of jigsaws, you can just spawn another piece on top of already generated structure or replace it?
     }

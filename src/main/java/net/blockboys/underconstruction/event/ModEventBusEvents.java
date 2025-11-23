@@ -1,6 +1,7 @@
 package net.blockboys.underconstruction.event;
 
 import net.blockboys.underconstruction.UnderConstruction;
+import net.blockboys.underconstruction.structure.StructureClass;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +25,9 @@ public class ModEventBusEvents {
             if (!chestItems.isEmpty()) {
                 for (ItemStack item: chestItems) {
                     if (item.getItem() == Items.COBBLESTONE && item.getCount() == 32) {
-                        System.out.println("TESTING WORKS");
+                        StructureClass.incrementStructureLevel();
+                        System.out.println(StructureClass.getStructureLevel());
+                        break;
                     }
                 }
             }
