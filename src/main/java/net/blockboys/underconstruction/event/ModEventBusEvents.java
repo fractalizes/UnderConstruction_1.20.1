@@ -25,6 +25,8 @@ public class ModEventBusEvents {
 
             if (!chestItems.isEmpty()) {
 
+                // get current necessary items and item amounts for upgrades
+                int newCount;
                 int structureLevel = StructureClass.getStructureLevel();
                 List<Item> upgradeItems = StructureClass.getItemsList(structureLevel);
                 List<Integer> upgradeNumbers = StructureClass.getNumbersList(structureLevel);
@@ -32,12 +34,17 @@ public class ModEventBusEvents {
                 for (ItemStack chestItem: chestItems) {
                     for (int i = 0; i < upgradeItems.size(); i++) {
 
-                        if (
-                                chestItem.getItem() == upgradeItems.get(i)
-                                && chestItem.getCount() >= upgradeNumbers.get(i)
-                        ) {
-                            int newCount = chestItem.getCount() - upgradeNumbers.get(i);
-                            StructureClass.setNumbersList(i, newCount);
+                        if (chestItem.getItem() == upgradeItems.get(i)) {
+
+                            // update chest container items
+                            if (chestItem.getCount() >= upgradeNumbers.get(i)) {
+                                newCount = chestItem.getCount() - upgradeNumbers.get(i);
+                                StructureClass.setNumbersList(i, newCount);
+                                chestItem.setCount(0);
+                                continue;
+                            }
+                            newCount = upgradeNumbers.get(i) - chestItem.getCount();
+                            StructureClass.setNumbersList(i, 0);
                             chestItem.setCount(newCount);
                         }
                     }

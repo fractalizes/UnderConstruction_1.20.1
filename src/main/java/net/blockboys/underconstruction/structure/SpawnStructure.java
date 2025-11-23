@@ -1,7 +1,6 @@
 package net.blockboys.underconstruction.structure;
 
 import net.blockboys.underconstruction.UnderConstruction;
-import net.blockboys.underconstruction.event.ModEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -46,7 +45,7 @@ public class SpawnStructure {
                     spawn.getZ()
             );
 
-            System.out.println(spawn.getX() + " " + spawn.getY() + " " + spawn.getZ() + " ");
+            //System.out.println(spawn.getX() + " " + spawn.getY() + " " + spawn.getZ() + " ");
 
             // lower y level if starting position has any of these blocks
             Block[] blocks = new Block[]{
