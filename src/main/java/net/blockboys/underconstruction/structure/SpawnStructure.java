@@ -27,9 +27,8 @@ public class SpawnStructure {
 
         // only generate when first creating world
         if (!StructureClass.isGenerated()) {
-
-            ServerLevel level = event.getServer().overworld(); // Overworld only
-            BlockPos spawn = level.getSharedSpawnPos();        // World spawn X/Z
+            ServerLevel level = event.getServer().overworld();
+            BlockPos spawn = level.getSharedSpawnPos(); // world x/z spawn
 
             // Get surface height at spawn X/Z
             int surfaceY = level.getHeight(

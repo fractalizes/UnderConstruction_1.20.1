@@ -23,7 +23,7 @@ public class StructureClass {
     };
 
     // construct number of materials needed list
-    private static Map<Integer, List<Integer>> upgradeNumbersList = new HashMap<>();
+    private static final Map<Integer, List<Integer>> upgradeNumbersList = new HashMap<>();
     static {
         upgradeNumbersList.put(1, new ArrayList<>(List.of(32, 32)));
         upgradeNumbersList.put(2, new ArrayList<>(List.of(32, 16)));
