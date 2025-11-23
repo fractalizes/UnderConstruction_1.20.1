@@ -27,7 +27,7 @@ public class SpawnStructure {
     public static void onServerStart(ServerStartedEvent event) {
 
         // only generate when first creating world
-        if (StructureClass.isGenerated()) {
+        if (!StructureClass.isGenerated()) {
 
             ServerLevel level = event.getServer().overworld(); // Overworld only
             BlockPos spawn = level.getSharedSpawnPos();        // World spawn X/Z
