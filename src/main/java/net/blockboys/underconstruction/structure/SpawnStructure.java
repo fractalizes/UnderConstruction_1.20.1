@@ -1,6 +1,7 @@
 package net.blockboys.underconstruction.structure;
 
 import net.blockboys.underconstruction.UnderConstruction;
+import net.blockboys.underconstruction.event.ModEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 @Mod.EventBusSubscriber(modid = UnderConstruction.MOD_ID)
 public class SpawnStructure {
 
+    // TODO find way to do world generation event instead of server starting event
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
         ServerLevel level = event.getServer().overworld(); // Overworld only
@@ -60,5 +62,7 @@ public class SpawnStructure {
         Villager villager = new Villager(EntityType.VILLAGER, level);
         villager.setPosRaw(villagerPos.getX(), villagerPos.getY(), villagerPos.getZ());
         level.addFreshEntity(villager);
+
+        // TODO maybe instead of jigsaws, you can just spawn another piece on top of already generated structure or replace it?
     }
 }

@@ -40,7 +40,6 @@ public class ModEvents {
                     new ItemStack(Items.PUMPKIN_SEEDS, 3),
                     4, 15, 0.03f
             ));
-
         }
     }
 }
