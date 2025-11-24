@@ -17,10 +17,10 @@ public class SetTowerLevel {
                 Commands.literal("tower")
                 .requires(commandSourceStack -> commandSourceStack.hasPermission(3))
                         .then(Commands.literal("set")
-                        .then(Commands.argument("level", IntegerArgumentType.integer(0, TowerStructure.getMaxStructureLevel()))
+                        .then(Commands.argument("level", IntegerArgumentType.integer(1, TowerStructure.getMaxStructureLevel()))
                                 .executes(SetTowerLevel::towerSetLevel)))
                         .then(Commands.literal("reset")
-                                .executes(SetTowerLevel::towerReset))
+                                .executes(SetTowerLevel::towerResetLevel))
         );
     }
 
@@ -33,7 +33,7 @@ public class SetTowerLevel {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int towerReset(CommandContext<CommandSourceStack> context) {
+    private static int towerResetLevel(CommandContext<CommandSourceStack> context) {
         TowerStructure.setStructureLevel(1);
         TowerStructure.generateStructurePiece();
 

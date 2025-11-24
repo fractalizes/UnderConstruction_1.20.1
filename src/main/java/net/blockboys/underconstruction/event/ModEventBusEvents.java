@@ -7,6 +7,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,9 +33,13 @@ public class ModEventBusEvents {
                 Container chestInv = chestMenu.getContainer();
                 List<ItemStack> chestItems = new ArrayList<>();
                 for (int i = 0; i < chestInv.getContainerSize(); i++) {
-                    chestItems.add(chestInv.getItem(i));
+                    ItemStack item = chestInv.getItem(i);
+                    if (item.getItem() != Items.AIR) {
+                        chestItems.add(chestInv.getItem(i));
+                    }
                 }
 
+                // if chest does not have only "air" items, perform actual check
                 if (!chestItems.isEmpty()) {
 
                     // get current necessary items and item amounts for upgrades
@@ -44,7 +49,6 @@ public class ModEventBusEvents {
 
                     for (ItemStack chestItem : chestItems) {
                         for (int i = 0; i < upgradeItems.size(); i++) {
-
                             if (chestItem.getItem() == upgradeItems.get(i)) {
 
                                 int required = upgradeNumbers.get(i);
@@ -65,6 +69,7 @@ public class ModEventBusEvents {
                             }
                         }
                     }
+
                     if (TowerStructure.checkUpgradeCompletion()) {
 
                         TowerStructure.incrementStructureLevel();
