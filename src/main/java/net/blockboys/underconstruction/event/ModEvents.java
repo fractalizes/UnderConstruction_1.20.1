@@ -2,18 +2,20 @@ package net.blockboys.underconstruction.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.blockboys.underconstruction.UnderConstruction;
+import net.blockboys.underconstruction.command.SetStructureLevel;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = UnderConstruction.MOD_ID)
+@Mod.EventBusSubscriber(modid = UnderConstruction.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
 
     @SubscribeEvent
@@ -41,5 +43,10 @@ public class ModEvents {
                     4, 15, 0.03f
             ));
         }
+    }
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event){
+        SetStructureLevel.register(event.getDispatcher());
     }
 }

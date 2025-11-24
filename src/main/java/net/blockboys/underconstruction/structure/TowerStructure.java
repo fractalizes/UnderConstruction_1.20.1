@@ -21,7 +21,7 @@ public class TowerStructure {
     private static boolean generated = false;
     private static int structureLevel = 1;
     private static int maxStructureLevel = 3;
-    private static String namespace = "under_construction";
+    private static String nameSpace = "under_construction";
     private static String[] structurePaths = {
         "ruins", "tier1", "tier2", "tier3"
     };
@@ -58,6 +58,10 @@ public class TowerStructure {
         return structureLevel;
     }
 
+    public static void setStructureLevel(int level) {
+        structureLevel = level;
+    }
+
     public static void incrementStructureLevel() {
         structureLevel++;
         System.out.println("level increased to " + structureLevel + "!!!!");
@@ -69,8 +73,11 @@ public class TowerStructure {
             if (upgradeNumber > 0) {
                 return false;
             }
-        }
-        return true;
+        } return true;
+    }
+
+    public static int getMaxStructureLevel() {
+        return maxStructureLevel;
     }
 
     public static boolean checkStructureMaxxed() {
@@ -82,7 +89,7 @@ public class TowerStructure {
     public static void generateStructurePiece() {
         StructureTemplateManager manager = level.getStructureManager();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
-                namespace, structurePaths[structureLevel - 1]);
+                nameSpace, structurePaths[structureLevel - 1]);
         StructureTemplate template = manager.getOrCreate(id);
         StructurePlaceSettings settings = new StructurePlaceSettings();
 
