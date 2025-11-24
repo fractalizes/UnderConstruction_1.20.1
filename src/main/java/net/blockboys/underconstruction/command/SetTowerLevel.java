@@ -10,7 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 
-public class SetStructureLevel {
+public class SetTowerLevel {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
         dispatcher.register(
@@ -18,9 +18,9 @@ public class SetStructureLevel {
                 .requires(commandSourceStack -> commandSourceStack.hasPermission(3))
                         .then(Commands.literal("set")
                         .then(Commands.argument("level", IntegerArgumentType.integer(0, TowerStructure.getMaxStructureLevel()))
-                                .executes(SetStructureLevel::towerSetLevel)))
+                                .executes(SetTowerLevel::towerSetLevel)))
                         .then(Commands.literal("reset")
-                                .executes(SetStructureLevel::towerReset))
+                                .executes(SetTowerLevel::towerReset))
         );
     }
 
