@@ -1,6 +1,8 @@
 package net.blockboys.underconstruction.structure;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.npc.Villager;
@@ -64,7 +66,8 @@ public class TowerStructure {
 
     public static void incrementStructureLevel() {
         structureLevel++;
-        System.out.println("level increased to " + structureLevel + "!!!!");
+        Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
+                "The Tower Structure is now Level " + structureLevel + "!"));
     }
 
     public static boolean checkUpgradeCompletion() {

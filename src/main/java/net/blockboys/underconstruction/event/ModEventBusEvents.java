@@ -35,7 +35,7 @@ public class ModEventBusEvents {
                 for (int i = 0; i < chestInv.getContainerSize(); i++) {
                     ItemStack item = chestInv.getItem(i);
                     if (item.getItem() != Items.AIR) {
-                        chestItems.add(chestInv.getItem(i));
+                        chestItems.add(item);
                     }
                 }
 
