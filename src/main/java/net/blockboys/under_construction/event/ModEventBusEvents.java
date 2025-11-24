@@ -1,7 +1,7 @@
-package net.blockboys.underconstruction.event;
+package net.blockboys.under_construction.event;
 
-import net.blockboys.underconstruction.UnderConstruction;
-import net.blockboys.underconstruction.structure.TowerStructure;
+import net.blockboys.under_construction.UnderConstruction;
+import net.blockboys.under_construction.structure.TowerStructure;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -24,7 +24,7 @@ public class ModEventBusEvents {
 
         // check if max upgrade has been achieved
         // ensures null will not be called
-        if (!TowerStructure.checkStructureMaxxed()) {
+        if (!TowerStructure.checkStructureMaxed()) {
 
             AbstractContainerMenu container = event.getContainer();
             if (!event.isCanceled() && container instanceof ChestMenu chestMenu) {

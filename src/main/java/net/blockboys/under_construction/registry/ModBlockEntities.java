@@ -1,8 +1,7 @@
-package net.blockboys.underconstruction.registry;
+package net.blockboys.under_construction.registry;
 
-import net.blockboys.underconstruction.UnderConstruction;
-import net.blockboys.underconstruction.block.UpgradeChestBlock;
-import net.blockboys.underconstruction.block.entity.UpgradeChestBlockEntity;
+import net.blockboys.under_construction.UnderConstruction;
+import net.blockboys.under_construction.block.entity.UpgradeChestBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

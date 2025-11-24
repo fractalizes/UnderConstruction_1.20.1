@@ -1,8 +1,8 @@
-package net.blockboys.underconstruction.event;
+package net.blockboys.under_construction.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.blockboys.underconstruction.UnderConstruction;
-import net.blockboys.underconstruction.command.TowerStructureCommands;
+import net.blockboys.under_construction.UnderConstruction;
+import net.blockboys.under_construction.command.TowerStructureCommands;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;

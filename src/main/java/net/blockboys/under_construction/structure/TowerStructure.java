@@ -1,5 +1,6 @@
-package net.blockboys.underconstruction.structure;
+package net.blockboys.under_construction.structure;
 
+import net.blockboys.under_construction.UnderConstruction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -23,7 +24,6 @@ public class TowerStructure {
     private static boolean generated = false;
     private static int structureLevel = 1;
     private static int maxStructureLevel = 3;
-    private static String nameSpace = "under_construction";
     private static String[] structurePaths = {
         "ruins", "tier1", "tier2", "tier3"
     };
@@ -83,7 +83,7 @@ public class TowerStructure {
         return maxStructureLevel;
     }
 
-    public static boolean checkStructureMaxxed() {
+    public static boolean checkStructureMaxed() {
         if (structureLevel < maxStructureLevel) return false;
         System.out.println("max level of " + structureLevel + " achieved!");
         return true;
@@ -92,7 +92,7 @@ public class TowerStructure {
     public static void generateStructurePiece() {
         StructureTemplateManager manager = level.getStructureManager();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
-                nameSpace, structurePaths[structureLevel - 1]);
+                UnderConstruction.MOD_ID, structurePaths[structureLevel - 1]);
         StructureTemplate template = manager.getOrCreate(id);
         StructurePlaceSettings settings = new StructurePlaceSettings();
 

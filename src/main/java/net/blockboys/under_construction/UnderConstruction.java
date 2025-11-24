@@ -1,7 +1,7 @@
-package net.blockboys.underconstruction;
+package net.blockboys.under_construction;
 
 import com.mojang.logging.LogUtils;
-import net.blockboys.underconstruction.registry.ModBlocks;
+import net.blockboys.under_construction.registry.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;

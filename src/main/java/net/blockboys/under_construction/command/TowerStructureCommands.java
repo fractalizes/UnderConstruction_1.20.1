@@ -1,10 +1,10 @@
-package net.blockboys.underconstruction.command;
+package net.blockboys.under_construction.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.blockboys.underconstruction.structure.TowerStructure;
+import net.blockboys.under_construction.structure.TowerStructure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -28,6 +28,8 @@ public class TowerStructureCommands {
                                     .executes(TowerStructureCommands::towerSetLevel)))
                             .then(Commands.literal("reset")
                                     .executes(TowerStructureCommands::towerResetLevel)))
+                            .then(Commands.literal("max")
+                                    .executes(TowerStructureCommands::towerMaxLevel))
                 .then(Commands.literal("materials")
                         .executes(TowerStructureCommands::towerMaterials))
         );
@@ -60,20 +62,35 @@ public class TowerStructureCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int towerMaterials(CommandContext<CommandSourceStack> context) {
-        int structureLevel = TowerStructure.getStructureLevel();
-        List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
-        List<Integer> upgradeNumbers = TowerStructure.getNumbersList(structureLevel);
+    private static int towerMaxLevel(CommandContext<CommandSourceStack> context) {
+        int maxLevel = TowerStructure.getMaxStructureLevel();
+        TowerStructure.setStructureLevel(maxLevel);
+        TowerStructure.generateStructurePiece();
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
-                "These are the materials needed for your Tower Upgrade:"));
-        for (int i = 0; i < upgradeItems.size(); i++) {
-            int required = upgradeNumbers.get(i);
-            if (required > 0) {
-                Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
-                        "| " + required + " " + upgradeItems.get(i)));
-            }
-        }
+                "The Tower Structure has been maxed out to Level " + maxLevel + "!"));
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static int towerMaterials(CommandContext<CommandSourceStack> context) {
+
+        if (TowerStructure.checkStructureMaxed()) {
+            int structureLevel = TowerStructure.getStructureLevel();
+            List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
+            List<Integer> upgradeNumbers = TowerStructure.getNumbersList(structureLevel);
+
+            Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
+                    "These are the materials needed for your Tower Upgrade:"));
+            for (int i = 0; i < upgradeItems.size(); i++) {
+                int required = upgradeNumbers.get(i);
+                if (required > 0) {
+                    Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
+                            "| x" + required + " " + upgradeItems.get(i)));
+                }
+            }
+        } else {
+            Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
+                    "There are no more materials you need for the Tower, you have maxed out its Level!"));
+        } return Command.SINGLE_SUCCESS;
     }
 }

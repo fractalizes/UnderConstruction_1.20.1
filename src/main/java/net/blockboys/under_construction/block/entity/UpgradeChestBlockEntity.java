@@ -1,6 +1,6 @@
-package net.blockboys.underconstruction.block.entity;
+package net.blockboys.under_construction.block.entity;
 
-import net.blockboys.underconstruction.registry.ModBlockEntities;
+import net.blockboys.under_construction.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
