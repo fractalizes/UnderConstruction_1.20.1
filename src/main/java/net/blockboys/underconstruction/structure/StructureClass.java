@@ -1,19 +1,29 @@
 package net.blockboys.underconstruction.structure;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.*;
 
 public class StructureClass {
-    private static boolean generated = false;
-    private static int structureLevel = 1;
+
     private static ServerLevel level;
     private static BlockPos groundPos;
     private static Villager villager;
+
+    private static boolean generated = false;
+    private static int structureLevel = 1;
+    private static String namespace = "under_construction";
+    private static String[] structurePaths = {
+        "ruins", "tier1", "tier2", "tier3"
+    };
 
     // construct materials list
     private static final Map<Integer, List<Item>> upgradeItemsList = new HashMap<>();
@@ -52,7 +62,7 @@ public class StructureClass {
         System.out.println("level increased to " + structureLevel + "!!!!");
     }
 
-    public static boolean checkUpgrade() {
+    public static boolean checkUpgradeCompletion() {
         List<Integer> upgradeNumbers = StructureClass.getNumbersList(structureLevel);
         for (int upgradeNumber: upgradeNumbers) {
             if (upgradeNumber > 0) {
@@ -60,6 +70,19 @@ public class StructureClass {
             }
         }
         return true;
+    }
+
+    public static void generateStructurePiece() {
+
+        StructureTemplateManager manager = level.getStructureManager();
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                namespace, structurePaths[structureLevel - 1]);
+        StructureTemplate template = manager.getOrCreate(id);
+        StructurePlaceSettings settings = new StructurePlaceSettings();
+
+        // replace old structure with new one
+        template.placeInWorld(level, groundPos, groundPos, settings, level.random, 2);
+
     }
 
     public static ServerLevel getLevel() {

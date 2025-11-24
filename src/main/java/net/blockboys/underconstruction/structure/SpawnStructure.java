@@ -25,9 +25,10 @@ public class SpawnStructure {
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
 
+        ServerLevel level = event.getServer().overworld();
+
         // only generate when first creating world
         if (!StructureClass.isGenerated()) {
-            ServerLevel level = event.getServer().overworld();
             BlockPos spawn = level.getSharedSpawnPos(); // world x/z spawn
 
             // Get surface height at spawn X/Z
@@ -55,12 +56,20 @@ public class SpawnStructure {
             }
 
             StructureTemplateManager manager = level.getStructureManager();
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath("under_construction", "ruins");
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                    "under_construction", "ruins");
             StructureTemplate template = manager.getOrCreate(id);
 
             // generate structure and villager
             StructurePlaceSettings settings = new StructurePlaceSettings();
-            template.placeInWorld(level, groundPos, groundPos, settings, level.random, 2);
+            template.placeInWorld(
+                    level,
+                    groundPos,
+                    groundPos,
+                    settings,
+                    level.random,
+                    2
+            );
 
             BlockPos villagerPos = groundPos.above(); // 1 block above ground
             Villager villager = new Villager(EntityType.VILLAGER, level);
@@ -71,7 +80,5 @@ public class SpawnStructure {
             StructureClass.constructor(level, groundPos, villager);
             StructureClass.setGenerated();
         }
-
-        // TODO maybe instead of jigsaws, you can just spawn another piece on top of already generated structure or replace it?
     }
 }

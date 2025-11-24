@@ -17,8 +17,9 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = UnderConstruction.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEventBusEvents {
 
+    // do check after player closes menu
     @SubscribeEvent
-    public static void detectChestItems(final PlayerContainerEvent.Open event) {
+    public static void detectChestItems(final PlayerContainerEvent.Close event) {
 
         AbstractContainerMenu container = event.getContainer();
         if (!event.isCanceled() && container instanceof ChestMenu chestMenu) {
@@ -47,17 +48,24 @@ public class ModEventBusEvents {
 
                             // update chest container items
                             if (chestItem.getCount() >= upgradeNumbers.get(i)) {
+
                                 StructureClass.setNumbersList(i, 0);
                                 chestItem.shrink(required);
+
                             } else {
+
                                 StructureClass.setNumbersList(i, required - count);
                                 chestItem.setCount(0);
+
                             }
                         }
                     }
                 }
-                if (StructureClass.checkUpgrade()) {
+                if (StructureClass.checkUpgradeCompletion()) {
+
                     StructureClass.incrementStructureLevel();
+                    StructureClass.generateStructurePiece();
+
                 }
             }
         }
