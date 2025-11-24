@@ -17,61 +17,61 @@ import java.util.*;
 
 public class TowerStructure {
 
-    private static ServerLevel level;
-    private static BlockPos groundPos;
-    private static Villager villager;
+    private static ServerLevel WORLD_LEVEL;
+    private static BlockPos GROUND_POS;
+    private static Villager VILLAGER_ENTITY;
 
-    private static boolean generated = false;
-    private static int structureLevel = 1;
-    private static int maxStructureLevel = 3;
-    private static String[] structurePaths = {
+    private static boolean GENERATED = false;
+    private static int STRUCTURE_LEVEL = 1;
+    private static int MAX_STRUCTURE_LEVEL = 3;
+    private static String[] STRUCTURE_PATHS = {
         "ruins", "tier1", "tier2", "tier3"
     };
 
     // construct materials list
-    private static final Map<Integer, List<Item>> upgradeItemsList = new HashMap<>();
+    private static final Map<Integer, List<Item>> UPGRADE_ITEMS_LIST = new HashMap<>();
     static {
-        upgradeItemsList.put(1, List.of(Items.COBBLESTONE, Items.STONE));
-        upgradeItemsList.put(2, List.of(Items.STONE_BRICKS, Items.COBBLESTONE_STAIRS));
+        UPGRADE_ITEMS_LIST.put(1, List.of(Items.COBBLESTONE, Items.STONE));
+        UPGRADE_ITEMS_LIST.put(2, List.of(Items.STONE_BRICKS, Items.COBBLESTONE_STAIRS));
     };
 
     // construct number of materials needed list
-    private static final Map<Integer, List<Integer>> upgradeNumbersList = new HashMap<>();
+    private static final Map<Integer, List<Integer>> UPGRADE_AMOUNT_LIST = new HashMap<>();
     static {
-        upgradeNumbersList.put(1, new ArrayList<>(List.of(32, 32)));
-        upgradeNumbersList.put(2, new ArrayList<>(List.of(32, 16)));
+        UPGRADE_AMOUNT_LIST.put(1, new ArrayList<>(List.of(32, 32)));
+        UPGRADE_AMOUNT_LIST.put(2, new ArrayList<>(List.of(32, 16)));
     }
 
     public static void constructor(ServerLevel levelConst, BlockPos groundPosConst, Villager villagerConst) {
-        level = levelConst;
-        groundPos = groundPosConst;
-        villager = villagerConst;
+        WORLD_LEVEL = levelConst;
+        GROUND_POS = groundPosConst;
+        VILLAGER_ENTITY = villagerConst;
     }
 
     public static boolean isGenerated() {
-        return generated;
+        return GENERATED;
     }
 
     public static void setGenerated() {
-        generated = true;
+        GENERATED = true;
     }
 
     public static int getStructureLevel() {
-        return structureLevel;
+        return STRUCTURE_LEVEL;
     }
 
     public static void setStructureLevel(int level) {
-        structureLevel = level;
+        STRUCTURE_LEVEL = level;
     }
 
     public static void incrementStructureLevel() {
-        structureLevel++;
+        STRUCTURE_LEVEL++;
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
-                "The Tower Structure is now Level " + structureLevel + "!"));
+                "The Tower Structure is now Level " + STRUCTURE_LEVEL + "!"));
     }
 
     public static boolean checkUpgradeCompletion() {
-        List<Integer> upgradeNumbers = TowerStructure.getNumbersList(structureLevel);
+        List<Integer> upgradeNumbers = TowerStructure.getAmountsList(STRUCTURE_LEVEL);
         for (int upgradeNumber: upgradeNumbers) {
             if (upgradeNumber > 0) {
                 return false;
@@ -80,66 +80,66 @@ public class TowerStructure {
     }
 
     public static int getMaxStructureLevel() {
-        return maxStructureLevel;
+        return MAX_STRUCTURE_LEVEL;
     }
 
     public static boolean checkStructureMaxed() {
-        if (structureLevel < maxStructureLevel) return false;
-        System.out.println("max level of " + structureLevel + " achieved!");
+        if (STRUCTURE_LEVEL < MAX_STRUCTURE_LEVEL) return false;
+        System.out.println("max level of " + STRUCTURE_LEVEL + " achieved!");
         return true;
     }
 
     public static void generateStructurePiece() {
-        StructureTemplateManager manager = level.getStructureManager();
+        StructureTemplateManager manager = WORLD_LEVEL.getStructureManager();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
-                UnderConstruction.MOD_ID, structurePaths[structureLevel - 1]);
+                UnderConstruction.MOD_ID, STRUCTURE_PATHS[STRUCTURE_LEVEL - 1]);
         StructureTemplate template = manager.getOrCreate(id);
         StructurePlaceSettings settings = new StructurePlaceSettings();
 
         // replace old structure with new one
-        template.placeInWorld(level,
-                groundPos,
-                groundPos,
+        template.placeInWorld(WORLD_LEVEL,
+                GROUND_POS,
+                GROUND_POS,
                 settings,
-                level.random,
+                WORLD_LEVEL.random,
                 2
         );
     }
 
     public static ServerLevel getLevel() {
-        return level;
+        return WORLD_LEVEL;
     }
 
     public static void setLevel(ServerLevel levelConst) {
-        level = levelConst;
+        WORLD_LEVEL = levelConst;
     }
 
     public static BlockPos getGroundPos() {
-        return groundPos;
+        return GROUND_POS;
     }
 
     public static void setGroundPos(BlockPos groundPosConst) {
-        groundPos = groundPosConst;
+        GROUND_POS = groundPosConst;
     }
 
     public static Villager getVillager() {
-        return villager;
+        return VILLAGER_ENTITY;
     }
 
     private void setVillager(Villager villagerConst) {
-        villager = villagerConst;
+        VILLAGER_ENTITY = villagerConst;
     }
 
     public static List<Item> getItemsList(int i) {
-        return upgradeItemsList.get(i);
+        return UPGRADE_ITEMS_LIST.get(i);
     }
 
-    public static List<Integer> getNumbersList(int i) {
-        return upgradeNumbersList.get(i);
+    public static List<Integer> getAmountsList(int i) {
+        return UPGRADE_AMOUNT_LIST.get(i);
     }
 
-    public static void setNumbersList(int index, int newCount) {
-        List<Integer> list = upgradeNumbersList.get(structureLevel);
+    public static void setAmountsList(int index, int newCount) {
+        List<Integer> list = UPGRADE_AMOUNT_LIST.get(STRUCTURE_LEVEL);
         list.set(index, newCount);
     }
 }

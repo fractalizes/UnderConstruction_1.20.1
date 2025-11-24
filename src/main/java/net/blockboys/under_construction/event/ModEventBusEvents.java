@@ -45,24 +45,24 @@ public class ModEventBusEvents {
                     // get current necessary items and item amounts for upgrades
                     int structureLevel = TowerStructure.getStructureLevel();
                     List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
-                    List<Integer> upgradeNumbers = TowerStructure.getNumbersList(structureLevel);
+                    List<Integer> upgradeAmounts = TowerStructure.getAmountsList(structureLevel);
 
                     for (ItemStack chestItem : chestItems) {
                         for (int i = 0; i < upgradeItems.size(); i++) {
                             if (chestItem.getItem() == upgradeItems.get(i)) {
 
-                                int required = upgradeNumbers.get(i);
+                                int required = upgradeAmounts.get(i);
                                 int count = chestItem.getCount();
 
                                 // update chest container items
-                                if (chestItem.getCount() >= upgradeNumbers.get(i)) {
+                                if (chestItem.getCount() >= upgradeAmounts.get(i)) {
 
-                                    TowerStructure.setNumbersList(i, 0);
+                                    TowerStructure.setAmountsList(i, 0);
                                     chestItem.shrink(required);
 
                                 } else {
 
-                                    TowerStructure.setNumbersList(i, required - count);
+                                    TowerStructure.setAmountsList(i, required - count);
                                     chestItem.setCount(0);
 
                                 }

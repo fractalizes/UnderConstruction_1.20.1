@@ -77,7 +77,7 @@ public class TowerStructureCommands {
         if (TowerStructure.checkStructureMaxed()) {
             int structureLevel = TowerStructure.getStructureLevel();
             List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
-            List<Integer> upgradeNumbers = TowerStructure.getNumbersList(structureLevel);
+            List<Integer> upgradeNumbers = TowerStructure.getAmountsList(structureLevel);
 
             Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                     "These are the materials needed for your Tower Upgrade:"));
