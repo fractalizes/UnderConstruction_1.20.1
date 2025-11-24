@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.*;
 
-public class StructureClass {
+public class TowerStructure {
 
     private static ServerLevel level;
     private static BlockPos groundPos;
@@ -20,6 +20,7 @@ public class StructureClass {
 
     private static boolean generated = false;
     private static int structureLevel = 1;
+    private static int maxStructureLevel = 3;
     private static String namespace = "under_construction";
     private static String[] structurePaths = {
         "ruins", "tier1", "tier2", "tier3"
@@ -63,7 +64,7 @@ public class StructureClass {
     }
 
     public static boolean checkUpgradeCompletion() {
-        List<Integer> upgradeNumbers = StructureClass.getNumbersList(structureLevel);
+        List<Integer> upgradeNumbers = TowerStructure.getNumbersList(structureLevel);
         for (int upgradeNumber: upgradeNumbers) {
             if (upgradeNumber > 0) {
                 return false;
@@ -72,8 +73,13 @@ public class StructureClass {
         return true;
     }
 
-    public static void generateStructurePiece() {
+    public static boolean checkStructureMaxxed() {
+        if (structureLevel < maxStructureLevel) return false;
+        System.out.println("max level of " + structureLevel + " achieved!");
+        return true;
+    }
 
+    public static void generateStructurePiece() {
         StructureTemplateManager manager = level.getStructureManager();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
                 namespace, structurePaths[structureLevel - 1]);
@@ -81,8 +87,13 @@ public class StructureClass {
         StructurePlaceSettings settings = new StructurePlaceSettings();
 
         // replace old structure with new one
-        template.placeInWorld(level, groundPos, groundPos, settings, level.random, 2);
-
+        template.placeInWorld(level,
+                groundPos,
+                groundPos,
+                settings,
+                level.random,
+                2
+        );
     }
 
     public static ServerLevel getLevel() {
