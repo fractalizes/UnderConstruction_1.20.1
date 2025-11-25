@@ -19,8 +19,8 @@ public class TowerMaterialsOverlay {
 
         // gui configurations
         // reference point is item block texture!
-        int x = ((screenWidth - scaleWidth) / 2) - 190;
-        int y = screenHeight - 215;
+        int x = ((screenWidth - scaleWidth) / 2) - 400;
+        int y = screenHeight - 420;
         int textOffset = 20;
 
         if (!TowerStructure.checkStructureMaxed()) {
