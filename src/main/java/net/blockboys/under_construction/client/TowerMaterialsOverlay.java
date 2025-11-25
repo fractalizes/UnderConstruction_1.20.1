@@ -1,16 +1,16 @@
 package net.blockboys.under_construction.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.blockboys.under_construction.UnderConstruction;
 import net.blockboys.under_construction.structure.TowerStructure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
+import java.util.List;
+
 public class TowerMaterialsOverlay {
-    private static final ResourceLocation COBBLESTONE_ASSET = ResourceLocation.fromNamespaceAndPath(
-            UnderConstruction.MOD_ID, "textures/icons/cobblestone_32.png");
 
     public static final IGuiOverlay HUD_MATERIALS_NEEDED = ((gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         // texture configurations
@@ -21,26 +21,51 @@ public class TowerMaterialsOverlay {
         // reference point is item block texture!
         int x = ((screenWidth - scaleWidth) / 2) - 190;
         int y = screenHeight - 215;
+        int textOffset = 20;
 
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                "Required Tower Materials:",
-                x, y - 15, 0xFFFF00
-        );
+        if (!TowerStructure.checkStructureMaxed()) {
+            // tower structure info
+            int structureLevel = TowerStructure.getStructureLevel();
+            List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
+            List<Integer> upgradeAmounts = TowerStructure.getAmountsList(structureLevel);
 
-        RenderSystem.setShaderTexture(0, COBBLESTONE_ASSET);
-        guiGraphics.blit(COBBLESTONE_ASSET,
-                x, y,
-                0, 0,
-                scaleWidth, scaleHeight,
-                textureWidth, textureHeight
-        );
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                "x32",
-                x + 20, y + 20, 0xFFFFFF
-        );
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            guiGraphics.drawString(
+                    Minecraft.getInstance().font,
+                    "Required Tower Materials:",
+                    x, y - 15, 0xFFFF00
+            );
+
+            for (int i = 0; i < upgradeAmounts.size(); i++) {
+                int required = upgradeAmounts.get(i);
+                if (required > 0) {
+                    ResourceLocation ASSET = TowerStructure.getMaterialAsset(upgradeItems.get(i).asItem());
+                    RenderSystem.setShaderTexture(0, ASSET);
+
+                    // draw texture and text
+                    guiGraphics.blit(ASSET,
+                            x, y,
+                            0, 0,
+                            scaleWidth, scaleHeight,
+                            textureWidth, textureHeight
+                    );
+                    guiGraphics.drawString(
+                            Minecraft.getInstance().font,
+                            "x" + required,
+                            x + textOffset, y + textOffset, 0xFFFFFF
+                    );
+                    y += 40;
+                }
+            }
+        } else {
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            guiGraphics.drawString(
+                    Minecraft.getInstance().font,
+                    "You have completed the Tower!",
+                    x, y - 15, 0xFFFF00
+            );
+        }
     });
 }

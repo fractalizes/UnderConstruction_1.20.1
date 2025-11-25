@@ -77,12 +77,12 @@ public class TowerStructureCommands {
         if (TowerStructure.checkStructureMaxed()) {
             int structureLevel = TowerStructure.getStructureLevel();
             List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
-            List<Integer> upgradeNumbers = TowerStructure.getAmountsList(structureLevel);
+            List<Integer> upgradeAmounts = TowerStructure.getAmountsList(structureLevel);
 
             Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                     "These are the materials needed for your Tower Upgrade:"));
             for (int i = 0; i < upgradeItems.size(); i++) {
-                int required = upgradeNumbers.get(i);
+                int required = upgradeAmounts.get(i);
                 if (required > 0) {
                     Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                             "| x" + required + " " + upgradeItems.get(i)));

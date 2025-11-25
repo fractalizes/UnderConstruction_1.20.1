@@ -46,7 +46,9 @@ public class TowerStructure {
     private static final Map<Item, ResourceLocation> UPGRADE_ASSET_LIST = new HashMap<>();
     static {
         UPGRADE_ASSET_LIST.put(Items.COBBLESTONE, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/cobblestone_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.STONE, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_32.png"));
         UPGRADE_ASSET_LIST.put(Items.STONE_BRICKS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_bricks_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.COBBLESTONE_STAIRS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/cobblestone_stairs_32.png"));
     }
 
     public static void constructor(ServerLevel levelConst, BlockPos groundPosConst, Villager villagerConst) {
@@ -92,7 +94,6 @@ public class TowerStructure {
 
     public static boolean checkStructureMaxed() {
         if (STRUCTURE_LEVEL < MAX_STRUCTURE_LEVEL) return false;
-        System.out.println("max level of " + STRUCTURE_LEVEL + " achieved!");
         return true;
     }
 
@@ -148,5 +149,9 @@ public class TowerStructure {
     public static void setAmountsList(int index, int newCount) {
         List<Integer> list = UPGRADE_AMOUNT_LIST.get(STRUCTURE_LEVEL);
         list.set(index, newCount);
+    }
+
+    public static ResourceLocation getMaterialAsset(Item item) {
+        return UPGRADE_ASSET_LIST.get(item);
     }
 }
