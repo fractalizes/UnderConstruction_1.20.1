@@ -16,6 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = UnderConstruction.MOD_ID)
 public class SpawnStructure {
@@ -30,8 +31,10 @@ public class SpawnStructure {
                 "TOWER_STRUCTURE_DATA"
         );
 
-        // only generate when first creating world
-        if (!tower.isGenerated()) {
+        // if tower already exists, rebuild it
+        if (tower.isGenerated()) {
+          TowerStructureGenerator.generateStructurePiece(level, tower);
+        } else { // construct otherwise
             BlockPos spawn = level.getSharedSpawnPos(); // world x/z spawn
 
             // get surface height at spawn x/z
@@ -61,10 +64,11 @@ public class SpawnStructure {
             Villager villager = new Villager(EntityType.VILLAGER, level);
             villager.setPosRaw(villagerPos.getX(), villagerPos.getY(), villagerPos.getZ());
             level.addFreshEntity(villager);
+            UUID villagerId = villager.getUUID();
 
             // create class to store data across files
-            tower.constructor(level, groundPos, villager);
-            TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
+            tower.constructor(groundPos, villagerId);
+            TowerStructureGenerator.generateStructurePiece(level, tower);
             tower.setGenerated();
 
             // mark data as dirty so it saves properly

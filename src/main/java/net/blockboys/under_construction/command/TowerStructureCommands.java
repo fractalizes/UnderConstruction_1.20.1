@@ -54,7 +54,7 @@ public class TowerStructureCommands {
         ServerLevel level = getOverworld(context);
         TowerStructure tower = getTowerStructure(level);
         tower.setStructureLevel(structureLevel);
-        TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
+        TowerStructureGenerator.generateStructurePiece(level, tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                 "The Tower Structure is now Level " + structureLevel + "!"));
@@ -66,7 +66,7 @@ public class TowerStructureCommands {
         TowerStructure tower = getTowerStructure(level);
 
         tower.setStructureLevel(1);
-        TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
+        TowerStructureGenerator.generateStructurePiece(level, tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                 "The Tower Structure Level has been reset!"));
@@ -79,7 +79,7 @@ public class TowerStructureCommands {
 
         int maxLevel = TowerStructure.getMaxStructureLevel();
         tower.setStructureLevel(maxLevel);
-        TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
+        TowerStructureGenerator.generateStructurePiece(level, tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                 "The Tower Structure has been maxed out to Level " + maxLevel + "!"));

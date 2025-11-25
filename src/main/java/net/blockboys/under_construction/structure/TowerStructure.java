@@ -19,9 +19,8 @@ import java.util.*;
 
 public class TowerStructure extends SavedData {
 
-    private ServerLevel WORLD_LEVEL;
     private BlockPos GROUND_POS;
-    private Villager VILLAGER_ENTITY;
+    private UUID VILLAGER_ID;
 
     private boolean GENERATED = false;
     private int STRUCTURE_LEVEL = 1;
@@ -58,10 +57,9 @@ public class TowerStructure extends SavedData {
         }
     }
 
-    public void constructor(ServerLevel levelConst, BlockPos groundPosConst, Villager villagerConst) {
-        WORLD_LEVEL = levelConst;
+    public void constructor(BlockPos groundPosConst, UUID villagerIdConst) {
         GROUND_POS = groundPosConst;
-        VILLAGER_ENTITY = villagerConst;
+        VILLAGER_ID = villagerIdConst;
     }
 
     public boolean isGenerated() {
@@ -103,14 +101,6 @@ public class TowerStructure extends SavedData {
         return true;
     }
 
-    public ServerLevel getLevel() {
-        return WORLD_LEVEL;
-    }
-
-    public void setLevel(ServerLevel levelConst) {
-        WORLD_LEVEL = levelConst;
-    }
-
     public BlockPos getGroundPos() {
         return GROUND_POS;
     }
@@ -119,12 +109,12 @@ public class TowerStructure extends SavedData {
         GROUND_POS = groundPosConst;
     }
 
-    public Villager getVillager() {
-        return VILLAGER_ENTITY;
+    public UUID getVillager() {
+        return VILLAGER_ID;
     }
 
-    private void setVillager(Villager villagerConst) {
-        VILLAGER_ENTITY = villagerConst;
+    private void setVillager(UUID villagerConst) {
+        VILLAGER_ID = villagerConst;
     }
 
     public static List<Item> getItemsList(int level) {
@@ -156,6 +146,7 @@ public class TowerStructure extends SavedData {
     public CompoundTag save(CompoundTag tag) {
         tag.putBoolean("GENERATED", GENERATED);
         tag.putInt("STRUCTURE_LEVEL", STRUCTURE_LEVEL);
+        tag.putLong("GROUND_POS", GROUND_POS.asLong()); // save groundpos as long
 
         for (int level = 1; level <= 3; level++) {
             List<Integer> amounts = UPGRADE_AMOUNT_LIST.get(level);
@@ -177,10 +168,14 @@ public class TowerStructure extends SavedData {
         this.GENERATED = tag.getBoolean("GENERATED");
         this.STRUCTURE_LEVEL = tag.getInt("STRUCTURE_LEVEL");
 
-        // Load upgrade amounts
+        if (tag.contains("GROUND_POS")) {
+            this.GROUND_POS = BlockPos.of(tag.getLong("GROUND_POS"));
+        }
+
         for (int level = 1; level <= 3; level++) {
             if (tag.contains("UPGRADE_AMOUNT_LIST" + level)) {
-                List<Integer> loaded = Arrays.stream(tag.getIntArray("UPGRADE_AMOUNT_LIST" + level)).boxed().toList();
+                int[] raw = tag.getIntArray("UPGRADE_AMOUNT_LIST" + level);
+                List<Integer> loaded = Arrays.stream(raw).boxed().toList();
                 List<Integer> current = UPGRADE_AMOUNT_LIST.get(level);
                 if (current != null && loaded.size() == current.size()) {
                     for (int i = 0; i < loaded.size(); i++) {

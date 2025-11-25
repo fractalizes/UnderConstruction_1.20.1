@@ -81,7 +81,7 @@ public class ModEventBusEvents {
 
                         if (tower.checkUpgradeCompletion()) {
                             tower.incrementStructureLevel();
-                            TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower); // Handle spawn logic elsewhere
+                            TowerStructureGenerator.generateStructurePiece(level, tower);
                         }
                     }
                 }
