@@ -9,8 +9,8 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public class TowerMaterialsOverlay {
 
-//    private static final ResourceLocation COBBLESTONE_ASSET = ResourceLocation.withDefaultNamespace(
-//            "textures/blocks/cobblestone.png");
+    /*private static final ResourceLocation COBBLESTONE_ASSET = ResourceLocation.withDefaultNamespace(
+            "textures/blocks/cobblestone.png");*/
     private static final ResourceLocation COBBLESTONE_ASSET = ResourceLocation.fromNamespaceAndPath(
             UnderConstruction.MOD_ID, "textures/icons/cobblestone.png");
 
