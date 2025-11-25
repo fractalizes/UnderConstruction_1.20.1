@@ -23,11 +23,10 @@ public class TowerMaterialsOverlay {
         int y = screenHeight - 420;
         int textOffset = 20;
 
-        if (!TowerStructure.checkStructureMaxed()) {
-            // tower structure info
-            int structureLevel = TowerStructure.getStructureLevel();
+        if (!ClientTowerData.checkStructureMaxed()) {
+            int structureLevel = ClientTowerData.getStructureLevel();
             List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
-            List<Integer> upgradeAmounts = TowerStructure.getAmountsList(structureLevel);
+            List<Integer> upgradeAmounts = ClientTowerData.getUpgradeAmounts(structureLevel);
 
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

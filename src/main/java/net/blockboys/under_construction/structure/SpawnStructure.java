@@ -1,7 +1,10 @@
 package net.blockboys.under_construction.structure;
 
 import net.blockboys.under_construction.UnderConstruction;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
@@ -20,11 +23,15 @@ public class SpawnStructure {
     // TODO find way to do world generation event instead of server starting event
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
-
         ServerLevel level = event.getServer().overworld();
+        TowerStructure tower = level.getDataStorage().computeIfAbsent(
+                TowerStructure::loadTower,
+                TowerStructure::new,
+                "TOWER_STRUCTURE_DATA"
+        );
 
         // only generate when first creating world
-        if (!TowerStructure.isGenerated()) {
+        if (!tower.isGenerated()) {
             BlockPos spawn = level.getSharedSpawnPos(); // world x/z spawn
 
             // get surface height at spawn x/z
@@ -56,9 +63,13 @@ public class SpawnStructure {
             level.addFreshEntity(villager);
 
             // create class to store data across files
-            TowerStructure.constructor(level, groundPos, villager);
-            TowerStructure.generateStructurePiece();
-            TowerStructure.setGenerated();
+            tower.constructor(level, groundPos, villager);
+            TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
+            tower.setGenerated();
+
+            // mark data as dirty so it saves properly
+            tower.setStructureLevel(1);
         }
     }
 }
+

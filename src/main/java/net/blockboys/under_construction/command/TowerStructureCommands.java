@@ -5,11 +5,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.blockboys.under_construction.structure.TowerStructure;
+import net.blockboys.under_construction.structure.TowerStructureGenerator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -27,16 +30,18 @@ public class TowerStructureCommands {
                             .then(Commands.argument("level", IntegerArgumentType.integer(1, TowerStructure.getMaxStructureLevel()))
                                     .executes(TowerStructureCommands::towerSetLevel)))
                             .then(Commands.literal("reset")
-                                    .executes(TowerStructureCommands::towerResetLevel)))
+                                    .executes(TowerStructureCommands::towerResetLevel))
                             .then(Commands.literal("max")
                                     .executes(TowerStructureCommands::towerMaxLevel))
-                .then(Commands.literal("materials")
+                ).then(Commands.literal("materials")
                         .executes(TowerStructureCommands::towerMaterials))
         );
     }
 
     private static int towerGetLevel(CommandContext<CommandSourceStack> context) {
-        int structureLevel = TowerStructure.getStructureLevel();
+        ServerLevel level = getOverworld(context);
+        TowerStructure tower = getTowerStructure(level);
+        int structureLevel = tower.getStructureLevel();
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                 "The Tower Structure is currently Level " + structureLevel + "."));
@@ -45,8 +50,11 @@ public class TowerStructureCommands {
 
     private static int towerSetLevel(CommandContext<CommandSourceStack> context) {
         int structureLevel = IntegerArgumentType.getInteger(context, "level");
-        TowerStructure.setStructureLevel(structureLevel);
-        TowerStructure.generateStructurePiece();
+
+        ServerLevel level = getOverworld(context);
+        TowerStructure tower = getTowerStructure(level);
+        tower.setStructureLevel(structureLevel);
+        TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                 "The Tower Structure is now Level " + structureLevel + "!"));
@@ -54,8 +62,11 @@ public class TowerStructureCommands {
     }
 
     private static int towerResetLevel(CommandContext<CommandSourceStack> context) {
-        TowerStructure.setStructureLevel(1);
-        TowerStructure.generateStructurePiece();
+        ServerLevel level = getOverworld(context);
+        TowerStructure tower = getTowerStructure(level);
+
+        tower.setStructureLevel(1);
+        TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                 "The Tower Structure Level has been reset!"));
@@ -63,9 +74,12 @@ public class TowerStructureCommands {
     }
 
     private static int towerMaxLevel(CommandContext<CommandSourceStack> context) {
+        ServerLevel level = getOverworld(context);
+        TowerStructure tower = getTowerStructure(level);
+
         int maxLevel = TowerStructure.getMaxStructureLevel();
-        TowerStructure.setStructureLevel(maxLevel);
-        TowerStructure.generateStructurePiece();
+        tower.setStructureLevel(maxLevel);
+        TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                 "The Tower Structure has been maxed out to Level " + maxLevel + "!"));
@@ -73,11 +87,14 @@ public class TowerStructureCommands {
     }
 
     private static int towerMaterials(CommandContext<CommandSourceStack> context) {
+        ServerLevel level = getOverworld(context);
+        TowerStructure tower = getTowerStructure(level);
 
-        if (TowerStructure.checkStructureMaxed()) {
-            int structureLevel = TowerStructure.getStructureLevel();
+        if (!tower.checkStructureMaxed()) {
+
+            int structureLevel = tower.getStructureLevel();
             List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
-            List<Integer> upgradeAmounts = TowerStructure.getAmountsList(structureLevel);
+            List<Integer> upgradeAmounts = tower.getAmountsList(structureLevel);
 
             Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                     "These are the materials needed for your Tower Upgrade:"));
@@ -92,5 +109,23 @@ public class TowerStructureCommands {
             Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                     "There are no more materials you need for the Tower, you have maxed out its Level!"));
         } return Command.SINGLE_SUCCESS;
+    }
+
+    //////////////////////////////////////
+    //////     HELPER FUNCTIONS     //////
+    //////////////////////////////////////
+
+    @NotNull
+    private static ServerLevel getOverworld(CommandContext<CommandSourceStack> context) {
+        return context.getSource().getLevel().getServer().overworld();
+    }
+
+    @NotNull
+    private static TowerStructure getTowerStructure(ServerLevel level) {
+        return level.getDataStorage().computeIfAbsent(
+                TowerStructure::loadTower,
+                TowerStructure::new,
+                "TOWER_STRUCTURE_DATA"
+        );
     }
 }

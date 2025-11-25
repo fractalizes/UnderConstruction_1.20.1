@@ -2,6 +2,8 @@ package net.blockboys.under_construction.event;
 
 import net.blockboys.under_construction.UnderConstruction;
 import net.blockboys.under_construction.structure.TowerStructure;
+import net.blockboys.under_construction.structure.TowerStructureGenerator;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -21,10 +23,17 @@ public class ModEventBusEvents {
     // do check after player closes menu
     @SubscribeEvent
     public static void detectChestItems(final PlayerContainerEvent.Close event) {
+        ServerLevel level = (ServerLevel) event.getEntity().getCommandSenderWorld();
+        TowerStructure tower = level.getDataStorage().computeIfAbsent(
+                TowerStructure::loadTower,
+                TowerStructure::new,
+                "TOWER_STRUCTURE_DATA"
+        );
+        int structureLevel = tower.getStructureLevel();
 
         // check if max upgrade has been achieved
         // ensures null will not be called
-        if (!TowerStructure.checkStructureMaxed()) {
+        if (!tower.checkStructureMaxed()) {
 
             AbstractContainerMenu container = event.getContainer();
             if (!event.isCanceled() && container instanceof ChestMenu chestMenu) {
@@ -43,38 +52,37 @@ public class ModEventBusEvents {
                 if (!chestItems.isEmpty()) {
 
                     // get current necessary items and item amounts for upgrades
-                    int structureLevel = TowerStructure.getStructureLevel();
-                    List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
-                    List<Integer> upgradeAmounts = TowerStructure.getAmountsList(structureLevel);
+                    List<Item> upgradeItems = tower.getItemsList(structureLevel);
+                    List<Integer> upgradeAmounts = tower.getAmountsList(structureLevel);
 
-                    for (ItemStack chestItem : chestItems) {
-                        for (int i = 0; i < upgradeItems.size(); i++) {
-                            if (chestItem.getItem() == upgradeItems.get(i)) {
+                    boolean changed = false;
 
-                                int required = upgradeAmounts.get(i);
-                                int count = chestItem.getCount();
+                    for (int i = 0; i < chestInv.getContainerSize(); i++) {
+                        ItemStack stack = chestInv.getItem(i);
+                        if (stack.isEmpty()) continue;
 
-                                // update chest container items
-                                if (chestItem.getCount() >= upgradeAmounts.get(i)) {
-
-                                    TowerStructure.setAmountsList(i, 0);
-                                    chestItem.shrink(required);
-
-                                } else {
-
-                                    TowerStructure.setAmountsList(i, required - count);
-                                    chestItem.setCount(0);
-
+                        for (int j = 0; j < upgradeItems.size(); j++) {
+                            if (stack.getItem() == upgradeItems.get(j)) {
+                                int required = upgradeAmounts.get(j);
+                                if (required > 0) {
+                                    int take = Math.min(stack.getCount(), required);
+                                    stack.shrink(take);
+                                    upgradeAmounts.set(j, required - take);
+                                    changed = true;
                                 }
                             }
                         }
                     }
 
-                    if (TowerStructure.checkUpgradeCompletion()) {
+                    if (changed) {
+                        for (int j = 0; j < upgradeAmounts.size(); j++) {
+                            tower.setAmountsList(structureLevel, j, upgradeAmounts.get(j));
+                        }
 
-                        TowerStructure.incrementStructureLevel();
-                        TowerStructure.generateStructurePiece();
-
+                        if (tower.checkUpgradeCompletion()) {
+                            tower.incrementStructureLevel();
+                            TowerStructureGenerator.generateStructurePiece(level, tower.getStructureLevel(), tower); // Handle spawn logic elsewhere
+                        }
                     }
                 }
             }
