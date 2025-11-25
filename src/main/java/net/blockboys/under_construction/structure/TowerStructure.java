@@ -42,6 +42,13 @@ public class TowerStructure {
         UPGRADE_AMOUNT_LIST.put(2, new ArrayList<>(List.of(32, 16)));
     }
 
+    // construct material assets list
+    private static final Map<Item, ResourceLocation> UPGRADE_ASSET_LIST = new HashMap<>();
+    static {
+        UPGRADE_ASSET_LIST.put(Items.COBBLESTONE, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/cobblestone_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.STONE_BRICKS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_bricks_32.png"));
+    }
+
     public static void constructor(ServerLevel levelConst, BlockPos groundPosConst, Villager villagerConst) {
         WORLD_LEVEL = levelConst;
         GROUND_POS = groundPosConst;
