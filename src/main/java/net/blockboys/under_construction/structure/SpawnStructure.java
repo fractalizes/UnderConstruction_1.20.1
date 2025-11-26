@@ -1,10 +1,7 @@
 package net.blockboys.under_construction.structure;
 
 import net.blockboys.under_construction.UnderConstruction;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
@@ -25,9 +22,9 @@ public class SpawnStructure {
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
         ServerLevel level = event.getServer().overworld();
-        TowerStructure tower = level.getDataStorage().computeIfAbsent(
-                TowerStructure::loadTower,
-                TowerStructure::new,
+        TowerData tower = level.getDataStorage().computeIfAbsent(
+                TowerData::loadTower,
+                TowerData::new,
                 "TOWER_STRUCTURE_DATA"
         );
 

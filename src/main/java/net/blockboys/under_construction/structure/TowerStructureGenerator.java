@@ -13,7 +13,7 @@ public class TowerStructureGenerator {
     private static final String[] STRUCTURE_PATHS = {
             "ruins", "tier1", "tier2", "tier3" };
 
-    public static void generateStructurePiece(ServerLevel level, @NotNull TowerStructure tower) {
+    public static void generateStructurePiece(ServerLevel level, @NotNull TowerData tower) {
         int structureLevel = tower.getStructureLevel();
         if (structureLevel < 0 || structureLevel > 3) return; // failsafe
 

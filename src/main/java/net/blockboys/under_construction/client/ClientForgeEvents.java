@@ -1,7 +1,7 @@
 package net.blockboys.under_construction.client;
 
 import net.blockboys.under_construction.UnderConstruction;
-import net.blockboys.under_construction.structure.TowerStructure;
+import net.blockboys.under_construction.structure.TowerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,9 +19,9 @@ public class ClientForgeEvents {
         ServerLevel level = Minecraft.getInstance().getSingleplayerServer().overworld();
 
         // only in singleplayer or connected to server
-        TowerStructure tower = level.getDataStorage().computeIfAbsent(
-                TowerStructure::loadTower,
-                TowerStructure::new,
+        TowerData tower = level.getDataStorage().computeIfAbsent(
+                TowerData::loadTower,
+                TowerData::new,
                 "TOWER_STRUCTURE_DATA"
         );
 

@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TowerStructureProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<TowerStructure> TOWER_STRUCTURE = CapabilityManager.get(new CapabilityToken<>() {});
+    public static Capability<TowerData> TOWER_STRUCTURE = CapabilityManager.get(new CapabilityToken<>() {});
 
-    public TowerStructure tower = null;
-    private final LazyOptional <TowerStructure> optional = LazyOptional.of(this::createTowerStructure);
+    public TowerData tower = null;
+    private final LazyOptional <TowerData> optional = LazyOptional.of(this::createTowerStructure);
 
-    private TowerStructure createTowerStructure() {
+    private TowerData createTowerStructure() {
         if (this.tower == null) {
-            this.tower = new TowerStructure();
+            this.tower = new TowerData();
         } return this.tower;
     }
 

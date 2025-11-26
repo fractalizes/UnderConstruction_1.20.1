@@ -2,7 +2,7 @@ package net.blockboys.under_construction.event;
 
 import net.blockboys.under_construction.UnderConstruction;
 import net.blockboys.under_construction.client.ClientTowerData;
-import net.blockboys.under_construction.structure.TowerStructure;
+import net.blockboys.under_construction.structure.TowerData;
 import net.blockboys.under_construction.structure.TowerStructureGenerator;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
@@ -14,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,11 @@ public class ModEventBusEvents {
 
     // do check after player closes menu
     @SubscribeEvent
-    public static void detectChestItems(final PlayerContainerEvent.Close event) {
+    public static void detectChestItems(final PlayerContainerEvent.@NotNull Close event) {
         ServerLevel level = (ServerLevel) event.getEntity().getCommandSenderWorld();
-        TowerStructure tower = level.getDataStorage().computeIfAbsent(
-                TowerStructure::loadTower,
-                TowerStructure::new,
+        TowerData tower = level.getDataStorage().computeIfAbsent(
+                TowerData::loadTower,
+                TowerData::new,
                 "TOWER_STRUCTURE_DATA"
         );
         int structureLevel = tower.getStructureLevel();

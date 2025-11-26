@@ -6,25 +6,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class TowerStructure extends SavedData {
+public class TowerData extends SavedData {
 
     private BlockPos GROUND_POS;
     private UUID VILLAGER_ID;
 
     private boolean GENERATED = false;
     private int STRUCTURE_LEVEL = 0;
-    private static int MAX_STRUCTURE_LEVEL = 3; // TODO include last tier! (tier 3)
+    private static int MAX_STRUCTURE_LEVEL = 3;
 
     // construct materials list
     private static final Map<Integer, List<Item>> UPGRADE_ITEMS_LIST = new HashMap<>();
@@ -45,7 +41,7 @@ public class TowerStructure extends SavedData {
         UPGRADE_ASSET_LIST.put(Items.COBBLESTONE_STAIRS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/cobblestone_stairs_32.png"));
     }
 
-    public TowerStructure() {
+    public TowerData() {
         // construct upgrade amounts
         for (int level : UPGRADE_ITEMS_LIST.keySet()) {
             List<Integer> defaults = switch (level) {
@@ -137,13 +133,13 @@ public class TowerStructure extends SavedData {
         return UPGRADE_ASSET_LIST.get(item);
     }
 
-    public void copyFrom(TowerStructure tower) {
+    public void copyFrom(@NotNull TowerData tower) {
         this.GENERATED = tower.GENERATED;
         this.STRUCTURE_LEVEL = tower.STRUCTURE_LEVEL;
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(@NotNull CompoundTag tag) {
         tag.putBoolean("GENERATED", GENERATED);
         tag.putInt("STRUCTURE_LEVEL", STRUCTURE_LEVEL);
         tag.putLong("GROUND_POS", GROUND_POS.asLong()); // save groundpos as long
@@ -158,13 +154,14 @@ public class TowerStructure extends SavedData {
         return tag;
     }
 
-    public static TowerStructure loadTower(CompoundTag tag) {
-        TowerStructure tower = new TowerStructure();
+    @NotNull
+    public static TowerData loadTower(CompoundTag tag) {
+        TowerData tower = new TowerData();
         tower.load(tag);
         return tower;
     }
 
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         this.GENERATED = tag.getBoolean("GENERATED");
         this.STRUCTURE_LEVEL = tag.getInt("STRUCTURE_LEVEL");
 

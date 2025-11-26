@@ -1,7 +1,7 @@
 package net.blockboys.under_construction.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.blockboys.under_construction.structure.TowerStructure;
+import net.blockboys.under_construction.structure.TowerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +25,7 @@ public class TowerMaterialsOverlay {
 
         if (!ClientTowerData.checkStructureMaxed()) {
             int structureLevel = ClientTowerData.getStructureLevel();
-            List<Item> upgradeItems = TowerStructure.getItemsList(structureLevel);
+            List<Item> upgradeItems = TowerData.getItemsList(structureLevel);
             List<Integer> upgradeAmounts = ClientTowerData.getUpgradeAmounts(structureLevel);
 
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
@@ -39,7 +39,7 @@ public class TowerMaterialsOverlay {
             for (int i = 0; i < upgradeAmounts.size(); i++) {
                 int required = upgradeAmounts.get(i);
                 if (required > 0) {
-                    ResourceLocation ASSET = TowerStructure.getMaterialAsset(upgradeItems.get(i).asItem());
+                    ResourceLocation ASSET = TowerData.getMaterialAsset(upgradeItems.get(i).asItem());
                     RenderSystem.setShaderTexture(0, ASSET);
 
                     // draw texture and text
