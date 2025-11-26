@@ -23,14 +23,14 @@ public class TowerStructure extends SavedData {
     private UUID VILLAGER_ID;
 
     private boolean GENERATED = false;
-    private int STRUCTURE_LEVEL = 1;
-    private static int MAX_STRUCTURE_LEVEL = 3;
+    private int STRUCTURE_LEVEL = 0;
+    private static int MAX_STRUCTURE_LEVEL = 3; // TODO include last tier! (tier 3)
 
     // construct materials list
     private static final Map<Integer, List<Item>> UPGRADE_ITEMS_LIST = new HashMap<>();
     static {
-        UPGRADE_ITEMS_LIST.put(1, List.of(Items.COBBLESTONE, Items.STONE));
-        UPGRADE_ITEMS_LIST.put(2, List.of(Items.STONE_BRICKS, Items.COBBLESTONE_STAIRS));
+        UPGRADE_ITEMS_LIST.put(0, List.of(Items.COBBLESTONE, Items.STONE));
+        UPGRADE_ITEMS_LIST.put(1, List.of(Items.STONE_BRICKS, Items.COBBLESTONE_STAIRS));
     };
 
     // construct number of materials needed list
@@ -49,8 +49,8 @@ public class TowerStructure extends SavedData {
         // construct upgrade amounts
         for (int level : UPGRADE_ITEMS_LIST.keySet()) {
             List<Integer> defaults = switch (level) {
-                case 1 -> new ArrayList<>(List.of(32, 32));
-                case 2 -> new ArrayList<>(List.of(32, 16));
+                case 0 -> new ArrayList<>(List.of(32, 32));
+                case 1 -> new ArrayList<>(List.of(32, 16));
                 default -> new ArrayList<>();
             };
             UPGRADE_AMOUNT_LIST.put(level, defaults);

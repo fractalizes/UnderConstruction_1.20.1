@@ -30,6 +30,6 @@ public class ClientTowerData {
     }
 
     public static boolean checkStructureMaxed() {
-        return STRUCTURE_LEVEL >= 3;
+        return STRUCTURE_LEVEL >= 4;
     }
 }

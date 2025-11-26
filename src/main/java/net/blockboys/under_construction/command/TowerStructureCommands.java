@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import net.blockboys.under_construction.client.ClientTowerData;
 import net.blockboys.under_construction.structure.TowerStructure;
 import net.blockboys.under_construction.structure.TowerStructureGenerator;
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class TowerStructureCommands {
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
+    public static void register(@NotNull CommandDispatcher<CommandSourceStack> dispatcher){
         dispatcher.register(Commands.literal("tower")
                 .then(Commands.literal("level")
                     // general commands
@@ -27,7 +28,7 @@ public class TowerStructureCommands {
                     // operator commands
                     .requires(commandSourceStack -> commandSourceStack.hasPermission(3))
                             .then(Commands.literal("set")
-                            .then(Commands.argument("level", IntegerArgumentType.integer(1, TowerStructure.getMaxStructureLevel()))
+                            .then(Commands.argument("level", IntegerArgumentType.integer(0, TowerStructure.getMaxStructureLevel()))
                                     .executes(TowerStructureCommands::towerSetLevel)))
                             .then(Commands.literal("reset")
                                     .executes(TowerStructureCommands::towerResetLevel))
@@ -50,10 +51,11 @@ public class TowerStructureCommands {
 
     private static int towerSetLevel(CommandContext<CommandSourceStack> context) {
         int structureLevel = IntegerArgumentType.getInteger(context, "level");
-
         ServerLevel level = getOverworld(context);
+
         TowerStructure tower = getTowerStructure(level);
         tower.setStructureLevel(structureLevel);
+        ClientTowerData.setStructureLevel(tower.getStructureLevel()); // update client data
         TowerStructureGenerator.generateStructurePiece(level, tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
@@ -65,7 +67,8 @@ public class TowerStructureCommands {
         ServerLevel level = getOverworld(context);
         TowerStructure tower = getTowerStructure(level);
 
-        tower.setStructureLevel(1);
+        tower.setStructureLevel(0);
+        ClientTowerData.setStructureLevel(tower.getStructureLevel()); // update client data
         TowerStructureGenerator.generateStructurePiece(level, tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
@@ -79,6 +82,7 @@ public class TowerStructureCommands {
 
         int maxLevel = TowerStructure.getMaxStructureLevel();
         tower.setStructureLevel(maxLevel);
+        ClientTowerData.setStructureLevel(tower.getStructureLevel()); // update client data
         TowerStructureGenerator.generateStructurePiece(level, tower);
 
         Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
@@ -115,13 +119,11 @@ public class TowerStructureCommands {
     //////     HELPER FUNCTIONS     //////
     //////////////////////////////////////
 
-    @NotNull
-    private static ServerLevel getOverworld(CommandContext<CommandSourceStack> context) {
+    private static ServerLevel getOverworld(@NotNull CommandContext<CommandSourceStack> context) {
         return context.getSource().getLevel().getServer().overworld();
     }
 
-    @NotNull
-    private static TowerStructure getTowerStructure(ServerLevel level) {
+    private static TowerStructure getTowerStructure(@NotNull ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
                 TowerStructure::loadTower,
                 TowerStructure::new,

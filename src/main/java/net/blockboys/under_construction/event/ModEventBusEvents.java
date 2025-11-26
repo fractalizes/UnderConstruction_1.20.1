@@ -1,6 +1,7 @@
 package net.blockboys.under_construction.event;
 
 import net.blockboys.under_construction.UnderConstruction;
+import net.blockboys.under_construction.client.ClientTowerData;
 import net.blockboys.under_construction.structure.TowerStructure;
 import net.blockboys.under_construction.structure.TowerStructureGenerator;
 import net.minecraft.server.level.ServerLevel;
@@ -81,6 +82,7 @@ public class ModEventBusEvents {
 
                         if (tower.checkUpgradeCompletion()) {
                             tower.incrementStructureLevel();
+                            ClientTowerData.setStructureLevel(tower.getStructureLevel()); // update client data
                             TowerStructureGenerator.generateStructurePiece(level, tower);
                         }
                     }

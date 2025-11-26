@@ -72,7 +72,7 @@ public class SpawnStructure {
             tower.setGenerated();
 
             // mark data as dirty so it saves properly
-            tower.setStructureLevel(1);
+            tower.setStructureLevel(0);
         }
     }
 }

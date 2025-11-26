@@ -7,25 +7,25 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import org.jetbrains.annotations.NotNull;
 
 public class TowerStructureGenerator {
     private static final String[] STRUCTURE_PATHS = {
             "ruins", "tier1", "tier2", "tier3" };
 
-    public static void generateStructurePiece(ServerLevel level, TowerStructure tower) {
+    public static void generateStructurePiece(ServerLevel level, @NotNull TowerStructure tower) {
         int structureLevel = tower.getStructureLevel();
-        if (structureLevel <= 0 || structureLevel > 3) return;
+        if (structureLevel < 0 || structureLevel > 3) return; // failsafe
 
         BlockPos pos = tower.getGroundPos();
         if (pos == null) return;
 
         StructureTemplateManager manager = level.getStructureManager();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
-                UnderConstruction.MOD_ID, STRUCTURE_PATHS[structureLevel - 1]);
+                UnderConstruction.MOD_ID, STRUCTURE_PATHS[structureLevel]);
         StructureTemplate template = manager.getOrCreate(id);
 
         StructurePlaceSettings settings = new StructurePlaceSettings();
         template.placeInWorld(level, pos, pos, settings, level.getRandom(), 2);
     }
-
 }
