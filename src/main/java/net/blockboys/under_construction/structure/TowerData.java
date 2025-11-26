@@ -27,6 +27,7 @@ public class TowerData extends SavedData {
     static {
         UPGRADE_ITEMS_LIST.put(0, List.of(Items.COBBLESTONE, Items.STONE));
         UPGRADE_ITEMS_LIST.put(1, List.of(Items.STONE_BRICKS, Items.COBBLESTONE_STAIRS));
+        UPGRADE_ITEMS_LIST.put(2, List.of(Items.SMOOTH_STONE_SLAB, Items.STONE_BRICK_STAIRS, Items.SPRUCE_FENCE));
     };
 
     // construct number of materials needed list
@@ -36,9 +37,12 @@ public class TowerData extends SavedData {
     private static final Map<Item, ResourceLocation> UPGRADE_ASSET_LIST = new HashMap<>();
     static {
         UPGRADE_ASSET_LIST.put(Items.COBBLESTONE, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/cobblestone_32.png"));
-        UPGRADE_ASSET_LIST.put(Items.STONE, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_32.png"));
-        UPGRADE_ASSET_LIST.put(Items.STONE_BRICKS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_bricks_32.png"));
         UPGRADE_ASSET_LIST.put(Items.COBBLESTONE_STAIRS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/cobblestone_stairs_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.SMOOTH_STONE_SLAB, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/smooth_stone_slab_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.SPRUCE_FENCE, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/spruce_fence_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.STONE, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.STONE_BRICK_STAIRS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_brick_stairs_32.png"));
+        UPGRADE_ASSET_LIST.put(Items.STONE_BRICKS, ResourceLocation.fromNamespaceAndPath(UnderConstruction.MOD_ID, "textures/icons/stone_bricks_32.png"));
     }
 
     public TowerData() {
@@ -47,6 +51,7 @@ public class TowerData extends SavedData {
             List<Integer> defaults = switch (level) {
                 case 0 -> new ArrayList<>(List.of(32, 32));
                 case 1 -> new ArrayList<>(List.of(32, 16));
+                case 2 -> new ArrayList<>(List.of(16, 16, 4));
                 default -> new ArrayList<>();
             };
             UPGRADE_AMOUNT_LIST.put(level, defaults);

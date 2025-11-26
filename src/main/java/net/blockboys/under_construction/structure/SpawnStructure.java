@@ -57,7 +57,7 @@ public class SpawnStructure {
             }
 
             // spawn initial villager
-            BlockPos villagerPos = groundPos.above(); // 1 block above ground
+            BlockPos villagerPos = groundPos.above(1); // 1 block above ground
             Villager villager = new Villager(EntityType.VILLAGER, level);
             villager.setPosRaw(villagerPos.getX(), villagerPos.getY(), villagerPos.getZ());
             level.addFreshEntity(villager);

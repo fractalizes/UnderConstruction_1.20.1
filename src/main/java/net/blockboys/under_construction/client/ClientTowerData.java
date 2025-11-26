@@ -1,5 +1,7 @@
 package net.blockboys.under_construction.client;
 
+import net.blockboys.under_construction.structure.TowerData;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,6 @@ public class ClientTowerData {
     }
 
     public static boolean checkStructureMaxed() {
-        return STRUCTURE_LEVEL >= 4;
+        return STRUCTURE_LEVEL == TowerData.getMaxStructureLevel();
     }
 }
