@@ -1,0 +1,13 @@
+{
+  "structures": [
+    { "structure": "under_construction:tower_structure", "weight": 1 }
+  ],
+  "placement": {
+    "type": "minecraft:concentric_rings",
+    "salt": 1694767089,
+    "distance": 0,
+    "spread": 1,
+    "count": 1,
+    "preferred_biomes": "#under_construction:has_structure/tower_structure_biomes"
+  }
+}

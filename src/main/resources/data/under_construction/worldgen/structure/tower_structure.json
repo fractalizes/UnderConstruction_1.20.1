@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:jigsaw",
+  "biomes": "#under_construction:has_structure/tower_structure_biomes",
+  "step": "surface_structures",
+
+  "start_pool": "under_construction:ruins",
+  "size": 1,
+
+  "start_height": { "absolute": 0 },
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "terrain_adaptation": "beard_thin",
+
+  "max_distance_from_center": 20,
+  "spawn_overrides": {},
+
+  "use_expansion_hack": false,
+  "liquid_settings": "apply_waterlogging"
+}
