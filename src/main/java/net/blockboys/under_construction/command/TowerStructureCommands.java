@@ -35,7 +35,9 @@ public class TowerStructureCommands {
                             .then(Commands.literal("max")
                                     .executes(TowerStructureCommands::towerMaxLevel))
                 ).then(Commands.literal("materials")
-                        .executes(TowerStructureCommands::towerMaterials))
+                        .executes(TowerStructureCommands::towerMaterials)
+                ).then(Commands.literal("hud")
+                        .executes(TowerStructureCommands::towerHud))
         );
     }
 
@@ -94,7 +96,7 @@ public class TowerStructureCommands {
         ServerLevel level = getOverworld(context);
         TowerData tower = getTowerStructure(level);
 
-        if (!tower.checkStructureMaxed()) {
+        if (tower.checkStructureMaxed()) {
 
             int structureLevel = tower.getStructureLevel();
             List<Item> upgradeItems = TowerData.getItemsList(structureLevel);
@@ -113,6 +115,13 @@ public class TowerStructureCommands {
             Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
                     "There are no more materials you need for the Tower, you have maxed out its Level!"));
         } return Command.SINGLE_SUCCESS;
+    }
+
+    private static int towerHud(CommandContext<CommandSourceStack> context) {
+        ClientTowerData.setHudEnabled(!ClientTowerData.isHudEnabled());
+        Minecraft.getInstance().gui.getChat().addMessage(Component.literal(
+                "The Tower HUD is now " + (ClientTowerData.isHudEnabled() ? "en" : "dis") + "abled!"));
+        return Command.SINGLE_SUCCESS;
     }
 
     //////////////////////////////////////

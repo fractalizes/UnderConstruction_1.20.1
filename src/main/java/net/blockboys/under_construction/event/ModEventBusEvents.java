@@ -35,7 +35,7 @@ public class ModEventBusEvents {
 
         // check if max upgrade has been achieved
         // ensures null will not be called
-        if (!tower.checkStructureMaxed()) {
+        if (tower.checkStructureMaxed()) {
 
             AbstractContainerMenu container = event.getContainer();
             if (!event.isCanceled() && container instanceof ChestMenu chestMenu) {

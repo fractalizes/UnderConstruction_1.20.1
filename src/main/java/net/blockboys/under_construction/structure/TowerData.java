@@ -20,7 +20,7 @@ public class TowerData extends SavedData {
 
     private boolean GENERATED = false;
     private int STRUCTURE_LEVEL = 0;
-    private static int MAX_STRUCTURE_LEVEL = 3;
+    private final static int MAX_STRUCTURE_LEVEL = 3;
 
     // construct materials list
     private static final Map<Integer, List<Item>> UPGRADE_ITEMS_LIST = new HashMap<>();
@@ -98,8 +98,7 @@ public class TowerData extends SavedData {
     }
 
     public boolean checkStructureMaxed() {
-        if (STRUCTURE_LEVEL < MAX_STRUCTURE_LEVEL) return false;
-        return true;
+        return STRUCTURE_LEVEL < MAX_STRUCTURE_LEVEL;
     }
 
     public BlockPos getGroundPos() {

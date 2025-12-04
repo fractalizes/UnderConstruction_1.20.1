@@ -13,6 +13,8 @@ import java.util.List;
 public class TowerMaterialsOverlay {
 
     public static final IGuiOverlay HUD_MATERIALS_NEEDED = ((gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
+        if (!ClientTowerData.isHudEnabled()) return;
+
         // texture configurations
         int textureWidth = 32, textureHeight = 32;
         int scaleWidth = 32, scaleHeight = 32;

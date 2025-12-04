@@ -8,11 +8,20 @@ import java.util.Map;
 
 public class ClientTowerData {
     public static boolean GENERATED = false;
+    public static boolean HUD_ENABLED = true;
     public static int STRUCTURE_LEVEL = 1;
     private static final Map<Integer, List<Integer>> UPGRADE_AMOUNT_LIST = new HashMap<>();
 
     public static void setGenerated(boolean gen) {
         GENERATED = gen;
+    }
+
+    public static boolean isHudEnabled() {
+        return HUD_ENABLED;
+    }
+
+    public static void setHudEnabled(boolean enabled) {
+        HUD_ENABLED = enabled;
     }
 
     public static int getStructureLevel() {
