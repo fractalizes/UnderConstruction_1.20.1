@@ -4,6 +4,9 @@ import net.blockboys.under_construction.UnderConstruction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -20,12 +23,17 @@ public class TowerStructureGenerator {
         BlockPos pos = tower.getGroundPos();
         if (pos == null) return;
 
+        Rotation rotation = Rotation.NONE;
+
         StructureTemplateManager manager = level.getStructureManager();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
                 UnderConstruction.MOD_ID, STRUCTURE_PATHS[structureLevel]);
         StructureTemplate template = manager.getOrCreate(id);
 
-        StructurePlaceSettings settings = new StructurePlaceSettings();
+        StructurePlaceSettings settings = new StructurePlaceSettings()
+                .setRotation(rotation)
+                .setMirror(Mirror.NONE)
+                .addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR);
         template.placeInWorld(level, pos, pos, settings, level.getRandom(), 2);
     }
 }
