@@ -32,8 +32,7 @@ public class TowerStructureGenerator {
 
         StructurePlaceSettings settings = new StructurePlaceSettings()
                 .setRotation(rotation)
-                .setMirror(Mirror.NONE)
-                .addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR);
+                .setMirror(Mirror.NONE);
         template.placeInWorld(level, pos, pos, settings, level.getRandom(), 2);
     }
 }
