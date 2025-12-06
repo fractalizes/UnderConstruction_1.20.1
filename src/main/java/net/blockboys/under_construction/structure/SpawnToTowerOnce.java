@@ -90,6 +90,7 @@ public class SpawnToTowerOnce {
             };
         }
 
+        // set tower data as dirty
         level.setDefaultSpawnPos(groundPos, yaw);
         tower.setGroundPos(groundPos.below());
         tower.setStructureLevel(0);

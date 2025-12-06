@@ -4,7 +4,11 @@ import net.blockboys.under_construction.UnderConstruction;
 import net.blockboys.under_construction.client.ClientTowerData;
 import net.blockboys.under_construction.structure.TowerData;
 import net.blockboys.under_construction.structure.TowerStructureGenerator;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -14,6 +18,9 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,6 +28,11 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = UnderConstruction.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEventBusEvents {
+    public final RegistryObject<SoundEvent> EXP_SOUND =
+            DeferredRegister.create(ForgeRegistries.SOUND_EVENTS.getRegistryName(), UnderConstruction.MOD_ID)
+                    .register("", () -> SoundEvent.createVariableRangeEvent(
+                            ResourceLocation.withDefaultNamespace("entity.experience_orb.pickup")
+                    ));
 
     // do check after player closes menu
     @SubscribeEvent
@@ -82,6 +94,7 @@ public class ModEventBusEvents {
                         }
 
                         if (tower.checkUpgradeCompletion()) {
+                            // TODO add sfx
                             tower.incrementStructureLevel();
                             ClientTowerData.setStructureLevel(tower.getStructureLevel()); // update client data
                             TowerStructureGenerator.generateStructurePiece(level, tower);
